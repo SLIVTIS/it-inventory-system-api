@@ -1,0 +1,40 @@
+{
+  "name": "api-it-inventory-system",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "api",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "babel-node": "babel-node --presets=@babel/preset-env",
+    "dev": "nodemon --exec npm run babel-node src/index.js",
+    "testdb": "nodemon --exec npm run babel-node src/database/database.js"
+  },
+  "keywords": [
+    "api",
+    "inventory",
+    "system",
+    "it",
+    "node",
+    "nodejs",
+    "express"
+  ],
+  "author": "Leobardo Salinas",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "16.4.5",
+    "express": "4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.1",
+    "sequelize": "^6.37.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.23.9",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.0"
+  }
+}
