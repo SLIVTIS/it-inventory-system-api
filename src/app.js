@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import morgan from "morgan";
 import db from "./database/database.js";
 import config from "./config.js";
@@ -30,6 +31,7 @@ export const app = express();
 app.set("port", config.port);
 
 //Middleware
+app.use(cors()); //Temporal
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(authMiddleware);

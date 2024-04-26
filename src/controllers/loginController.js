@@ -8,9 +8,9 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (email === undefined || password === undefined) {
-        return res.status(401).json("Usuario o contraseña incorrectos");
+        return res.status(401).json({ "message": 'Usuario o contraseña incorrectos' });
     } else if (!emailValidator(email)) {
-        return res.status(401).json("Introduce un email valido");
+        return res.status(401).json({ "message": 'Introduce un email valido' });
     }
 
     try {
@@ -29,13 +29,15 @@ export const login = async (req, res) => {
                 res.status(200).json({
                     "username": userAdmin.username,
                     "email": userAdmin.email,
+                    "type": 'admin',
                     "token": token
                 });
             } else {
-                res.status(401).json("Usuario o contraseña incorrectos");
+                res.status(401).json({ "message": 'Usuario o contraseña incorrectos' });
             }
         } else {
-            res.status(400).json("Usuario o contraseña incorrectos");
+            //Aqui se hace el login de los tecnicos
+            res.status(401).json({ "message": 'Usuario o contraseña incorrectos' });
         }
     } catch (error) {
         console.log(error.message);
