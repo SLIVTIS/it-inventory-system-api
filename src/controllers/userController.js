@@ -16,7 +16,6 @@ export const addUser = async (req, res) => {
     console.log(`${username} ${email} ${password}`);
     try {
         const hashedPassword = await bcrypt.hash(password, 8);
-        console.log(`contraseña ${hashedPassword}`);
         await User.create({ username, email, password: hashedPassword });
         res.status(200).json("Usuario creado con exito");
     } catch (error) {

@@ -1,4 +1,5 @@
 import Admin from "../models/admin.js";
+import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../config.js";
@@ -21,7 +22,8 @@ export const login = async (req, res) => {
             if (isLogin) {
                 const adminToken = {
                     id: userAdmin.id,
-                    username: userAdmin.username
+                    username: userAdmin.username,
+                    isAdmin: true
                 }
 
                 const token = jwt.sign(adminToken, config.spassword);
@@ -29,15 +31,36 @@ export const login = async (req, res) => {
                 res.status(200).json({
                     "username": userAdmin.username,
                     "email": userAdmin.email,
-                    "type": 'admin',
+                    "isAdmin": true,
                     "token": token
                 });
             } else {
-                res.status(401).json({ "message": 'Usuario o contraseña incorrectos' });
+                return res.status(401).json({ "message": 'Usuario o contraseña incorrectos' });
             }
         } else {
             //Aqui se hace el login de los tecnicos
-            res.status(401).json({ "message": 'Usuario o contraseña incorrectos' });
+            const user = await User.findOne({ where: { email: email }, and: { active: true } });
+            if (user !== null) {
+                let isLogin = await bcrypt.compare(password, user.password);
+                if (isLogin) {
+                    const userToken = {
+                        id: user.id,
+                        username: user.username,
+                        isAdmin: false
+                    }
+
+                    const token = jwt.sign(userToken, config.spassword);
+
+                    res.status(200).json({
+                        "username": user.username,
+                        "email": user.email,
+                        "isAdmin": false,
+                        "token": token
+                    });
+                } else {
+                    return res.status(401).json({ "message": 'Usuario o contraseña incorrectos' });
+                }
+            }
         }
     } catch (error) {
         console.log(error.message);

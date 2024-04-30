@@ -20,7 +20,18 @@ const authMiddleware = (req, res, next) => {
             if (!decodeToken.id) {
                 return res.status(401).json({ error: 'Token missing or invalid ' });
             }
-            next();
+            if (decodeToken.isAdmin) {
+                next(); // Si es administrador, dejar pasar la solicitud
+            } else {
+                if (req.method !== 'GET') {
+                    return res.status(403).json({ error: 'Acceso denegado. No tienes permiso para esta operación.' });
+                } else {
+                    if (req.path.startsWith('/api/v1/admin')) {
+                        return res.status(403).json({ error: 'Acceso denegado. No eres un administrador.' });
+                    }
+                    next(); // Si la solicitud es GET, dejar pasar la solicitud
+                }
+            }
         } catch (error) {
             console.error("Error::Token:", error);
             return res.status(401).json({ error: 'Token missing or invalid ' });

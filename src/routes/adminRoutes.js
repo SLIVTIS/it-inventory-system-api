@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getAdmins, addAdmin } from "../controllers/adminController.js";
+import { getAdmins, getUsers, addUser } from "../controllers/adminController.js";
 
 const router = Router();
 
 router.get("/", getAdmins);
-router.post("/", addAdmin);
+router.get("/users", getUsers);
+router.post("/", addUser);
 
 export default router;

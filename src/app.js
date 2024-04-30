@@ -31,7 +31,7 @@ export const app = express();
 app.set("port", config.port);
 
 //Middleware
-app.use(cors()); //Temporal
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(authMiddleware);
