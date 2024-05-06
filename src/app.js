@@ -9,6 +9,9 @@ import loginRouter from "./routes/loginRoutes.js";
 import userRouters from "./routes/userRoutes.js";
 import countriesRouters from "./routes/countriesRoutes.js";
 import adminRouters from "./routes/adminRoutes.js";
+import supplierRouters from "./routes/supplierRoutes.js";
+import categorieRouters from "./routes/categoriesRoutes.js";
+import articlesRouters from "./routes/articlesRoutes.js";
 
 //Middleware
 import authMiddleware from "./middlewares/authMiddleware.js";
@@ -41,3 +44,6 @@ app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/admin", adminRouters);
 app.use("/api/v1/user", userRouters);
 app.use("/api/v1/countries", countriesRouters);
+app.use("/api/v1/suppliers", supplierRouters);
+app.use("/api/v1/categories", categorieRouters);
+app.use("/api/v1/articles", articlesRouters);
