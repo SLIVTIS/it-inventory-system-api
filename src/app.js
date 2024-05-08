@@ -12,6 +12,10 @@ import adminRouters from "./routes/adminRoutes.js";
 import supplierRouters from "./routes/supplierRoutes.js";
 import categorieRouters from "./routes/categoriesRoutes.js";
 import articlesRouters from "./routes/articlesRoutes.js";
+import storeRouters from "./routes/storeRoutes.js";
+import locationRouters from "./routes/locationRoutes.js";
+import stockRouters from "./routes/stockRoutes.js";
+import stockStoreRouters from "./routes/stockStoreRoutes.js";
 
 //Middleware
 import authMiddleware from "./middlewares/authMiddleware.js";
@@ -47,3 +51,7 @@ app.use("/api/v1/countries", countriesRouters);
 app.use("/api/v1/suppliers", supplierRouters);
 app.use("/api/v1/categories", categorieRouters);
 app.use("/api/v1/articles", articlesRouters);
+app.use("/api/v1/stores", storeRouters);
+app.use("/api/v1/locations", locationRouters);
+app.use("/api/v1/stock", stockRouters);
+app.use("/api/v1/stock-store", stockStoreRouters);

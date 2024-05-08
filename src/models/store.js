@@ -1,27 +1,27 @@
 import { DataTypes } from "sequelize";
 import db from "../database/database.js";
 
-const Article = db.define('article', {
+const Store = db.define('store', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
     },
-    supplierId: {
-        type: DataTypes.INTEGER,
+    code: {
+        type: DataTypes.STRING(45),
         allowNull: false
     },
-    categorieId: {
-        type: DataTypes.INTEGER,
+    name: {
+        type: DataTypes.STRING(255),
         allowNull: false
     },
-    modelname: {
-        type: DataTypes.STRING(80),
-        allowNull: false
+    address: {
+        type: DataTypes.STRING(250),
     },
-    description: {
-        type: DataTypes.STRING(255)
+    isHostelery: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
     },
     active: {
         type: DataTypes.BOOLEAN,
@@ -30,7 +30,7 @@ const Article = db.define('article', {
 }, {
     timestamps: true,
     paranoid: true,
-    underscored: true
+    underscored: true,
 });
 
-export default Article;
+export default Store;

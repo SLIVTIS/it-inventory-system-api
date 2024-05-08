@@ -6,18 +6,15 @@ export const getArticles = async (req, res) => {
             include: [
                 {
                     model: Supplier,
-                    attributes: ['name'], // Especifica las columnas que deseas devolver del modelo Supplier
+                    attributes: ['name'], // Especifica las columnas que deseas devolver
                 },
                 {
                     model: Categorie,
-                    attributes: ['name'], // Especifica las columnas que deseas devolver del modelo Categorie
+                    attributes: ['name'], // Especifica las columnas que deseas devolver
                 }
             ]
         });
-
-        // Mapea cada instancia del modelo a JSON
-        const articlesJSON = articles.map(article => article.toJSON());
-        res.status(200).json(articlesJSON);
+        res.status(200).json(articles);
     } catch (error) {
         console.log(error);
         res.status(500).json("Error interno");
@@ -36,5 +33,28 @@ export const addArticle = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Error interno" });
+    }
+}
+
+export const getArticlesByCategory = async (req, res) => {
+    const categoryId = req.params.categoryId; // Obtén el ID de la categoría de los parámetros de la URL
+    try {
+        const articles = await Article.findAll({
+            where: { categorieId: categoryId }, // Filtra los artículos por el ID de la categoría
+            include: [
+                {
+                    model: Supplier,
+                    attributes: ['name'], // Especifica las columnas que deseas devolver del modelo Supplier
+                },
+                {
+                    model: Categorie,
+                    attributes: ['name'], // Especifica las columnas que deseas devolver del modelo Categorie
+                }
+            ]
+        });
+        res.status(200).json(articles);
+    } catch (error) {
+        console.error('Error al obtener los artículos por categoría:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 }

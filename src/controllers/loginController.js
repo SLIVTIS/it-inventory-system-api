@@ -3,7 +3,7 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../config.js";
-import { emailValidator } from "../utils/validatorLogin.js";
+import { emailValidator } from "../utils/validator.js";
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
