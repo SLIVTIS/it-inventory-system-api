@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { addStockStore, getStockByStore, getStockStore } from "../controllers/stockStoreController.js";
+import { addReassignStore, addStockStore, getStockStore } from "../controllers/stockStoreController.js";
 
 const router = Router();
 
 router.get("/", getStockStore);
-router.get("/:storeId", getStockByStore);
 router.post("/", addStockStore);
+router.post("/reassign", addReassignStore);
 export default router;

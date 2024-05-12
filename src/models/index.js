@@ -11,7 +11,8 @@ import Stock from "./stock.js";
 import StateMovement from "./stateMovement.js";
 import StockMovements from "./stockMovements.js";
 import StockStore from "./stockStore.js";
-
+import PermissionStore from "./permissionStore.js";
+import PermissionLocation from "./permissionLocation.js";
 
 //----------Asociaciones de articulos
 Supplier.hasMany(Article, { onUpdate: 'CASCADE', });
@@ -77,6 +78,9 @@ StateMovement.hasOne(StockMovements, {
 });
 Admin.hasMany(StockMovements, { onUpdate: 'CASCADE' });
 User.hasMany(StockMovements, { onUpdate: 'CASCADE' });
+StockMovements.belongsTo(Stock);
+StockMovements.belongsTo(Store);
+StockMovements.belongsTo(StateMovement);
 StockMovements.belongsTo(Admin);
 StockMovements.belongsTo(User);
 
@@ -103,9 +107,41 @@ StockStore.belongsTo(StockMovements);
 StockStore.belongsTo(Store);
 StockStore.belongsTo(Stock);
 
+//----------Asosiacion de permisos de tienda
+User.hasMany(PermissionStore, {
+    foreignKey: {
+        allowNull: false
+    },
+    onUpdate: 'CASCADE'
+});
+Store.hasMany(PermissionStore, {
+    foreignKey: {
+        allowNull: false
+    },
+    onUpdate: 'CASCADE'
+});
+PermissionStore.belongsTo(User);
+PermissionStore.belongsTo(Store);
 
+//----------Asosiacion de permisos de localidad
+User.hasMany(PermissionLocation, {
+    foreignKey: {
+        allowNull: false
+    },
+    onUpdate: 'CASCADE'
+});
+Location.hasMany(PermissionLocation, {
+    foreignKey: {
+        allowNull: false
+    },
+    onUpdate: 'CASCADE'
+});
+PermissionLocation.belongsTo(User);
+PermissionLocation.belongsTo(Location);
 
 export {
+    Admin,
+    User,
     Article,
     Supplier,
     Categorie,
@@ -115,5 +151,7 @@ export {
     Stock,
     StateMovement,
     StockMovements,
-    StockStore
+    StockStore,
+    PermissionStore,
+    PermissionLocation
 };

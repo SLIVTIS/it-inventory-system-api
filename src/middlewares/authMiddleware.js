@@ -24,7 +24,13 @@ const authMiddleware = (req, res, next) => {
                 next(); // Si es administrador, dejar pasar la solicitud
             } else {
                 if (req.method !== 'GET') {
-                    return res.status(403).json({ error: 'Acceso denegado. No tienes permiso para esta operación.' });
+                    if (req.path.startsWith('/api/v1/state') ||
+                        req.path.startsWith('/api/v1/stock-store') ||
+                        req.path.startsWith('/api/v1/stores/responsive')) {
+                        next();
+                    } else {
+                        return res.status(403).json({ error: 'Acceso denegado. No tienes permiso para esta operación.' });
+                    }
                 } else {
                     if (req.path.startsWith('/api/v1/admin')) {
                         return res.status(403).json({ error: 'Acceso denegado. No eres un administrador.' });

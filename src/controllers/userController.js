@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.js";
+import { Sequelize, where } from "sequelize";
 
 export const getUsers = async (req, res) => {
     try {
@@ -23,3 +24,21 @@ export const addUser = async (req, res) => {
         res.status(500).json({ message: "Error interno del servidor" });
     }
 };
+
+export const getUsersByPermissionLocation = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const users = await User.findAll({
+            where: {
+                id: {
+                    [Sequelize.Op.notIn]: Sequelize.literal(`(SELECT DISTINCT user_Id FROM permission_locations WHERE location_id = ${id})`),
+                },
+            },
+        });
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Error al obtener los usuarios por permiso de ubicacion:", error);
+        res.status(500).json({ message: "Error interno del servidor" });
+    }
+}

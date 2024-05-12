@@ -1,5 +1,6 @@
-import { Stock, Article, Supplier, Categorie } from "../models/index.js";
+import { Stock, Article, Supplier, Categorie, StockMovements, StateMovement, StockStore } from "../models/index.js";
 import { Sequelize } from "sequelize";
+import { cleanJSON } from "../utils/flattenJson.js";
 
 export const addStock = async (req, res) => {
     try {
@@ -69,9 +70,87 @@ export const getStockUnassigned = async (req, res) => {
                 }
             ]
         });
-        res.status(200).json(stocks);
+
+        //Clean JSON
+        const stock = [];
+        stocks.forEach(element => {
+            const data = {
+                id: element.id,
+                serie: element.serie,
+                comment: element.comment,
+                categorie: element.article.categorie.name,
+                supplier: element.article.supplier.name,
+                modelname: element.article.modelname
+            }
+            stock.push(data);
+        });
+        res.status(200).json(stock);
     } catch (error) {
         console.log(error);
+        res.status(500).json({ message: "Error interno" });
+    }
+}
+
+export const getStockByStore = async (req, res) => {
+    const storeId = req.params.storeId; // Obtén el ID de la categoría de los parámetros de la URL
+    try {
+        const stocks = await StockStore.findAll({
+            where: { storeId: storeId },
+            include: [
+                {
+                    model: Stock,
+                    attributes: ['id', 'serie'],
+                    include: [
+                        {
+                            model: Article,
+                            attributes: ['modelname'],
+                            include: [
+                                {
+                                    model: Supplier,
+                                    attributes: ['name'], // Incluir solo el nombre de la categoría
+                                },
+                                {
+                                    model: Categorie,
+                                    attributes: ['name'], // Incluir solo el nombre de la categoría
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    model: StockMovements,
+                    attributes: [],
+                    include: [
+                        {
+                            model: StateMovement,
+                            attributes: ['id', 'status']
+                        }
+                    ]
+                }
+            ],
+            raw: true, nest: true
+        });
+
+        //Clean JSON
+        const stock = [];
+        stocks.forEach(element => {
+            const data = {
+                id: element.stockId,
+                stockStoreId: element.id,
+                stockMovementId: element.stockMovementId,
+                storeId: element.storeId,
+                statusId: element.stockMovement.stateMovement.id,
+                status: element.stockMovement.stateMovement.status,
+                serie: element.stock.serie,
+                comment: element.comment,
+                categorie: element.stock.article.categorie.name,
+                supplier: element.stock.article.supplier.name,
+                modelname: element.stock.article.modelname
+            }
+            stock.push(data);
+        });
+        res.status(200).json(stock);
+    } catch (error) {
+        console.log("Error al obtener stock de tiendas: " + error);
         res.status(500).json({ message: "Error interno" });
     }
 }

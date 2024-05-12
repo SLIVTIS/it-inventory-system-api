@@ -16,6 +16,7 @@ import storeRouters from "./routes/storeRoutes.js";
 import locationRouters from "./routes/locationRoutes.js";
 import stockRouters from "./routes/stockRoutes.js";
 import stockStoreRouters from "./routes/stockStoreRoutes.js";
+import stateRouters from "./routes/stateRoutes.js";
 
 //Middleware
 import authMiddleware from "./middlewares/authMiddleware.js";
@@ -55,3 +56,4 @@ app.use("/api/v1/stores", storeRouters);
 app.use("/api/v1/locations", locationRouters);
 app.use("/api/v1/stock", stockRouters);
 app.use("/api/v1/stock-store", stockStoreRouters);
+app.use('/api/v1/state', stateRouters);

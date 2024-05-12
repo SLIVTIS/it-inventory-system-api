@@ -1,4 +1,5 @@
-import { Article, Supplier, Categorie } from "../models/index.js"
+import { Sequelize } from "sequelize";
+import { Article, Supplier, Categorie, Store, Stock, StockStore, Location } from "../models/index.js"
 
 export const getArticles = async (req, res) => {
     try {
@@ -56,5 +57,54 @@ export const getArticlesByCategory = async (req, res) => {
     } catch (error) {
         console.error('Error al obtener los artículos por categoría:', error);
         res.status(500).json({ message: 'Error interno del servidor' });
+    }
+}
+
+export async function getArticleByStore(storeId) {
+    try {
+        const store = await Store.findAll({
+            attributes: ['code', 'location_id'],
+            where: {
+                id: storeId
+            },
+            include: [
+                {
+                    model: StockStore,
+                    attributes: [],
+                    include: [
+                        {
+                            model: Stock,
+                            attributes: ['serie'],
+                            include: [
+                                {
+                                    model: Article,
+                                    attributes: ['modelname'],
+                                    include: [
+                                        {
+                                            model: Supplier,
+                                            attributes: ['name']
+                                        },
+                                        {
+                                            model: Categorie,
+                                            attributes: ['name']
+                                        }
+                                    ]
+                                },
+                            ]
+                        }
+                    ]
+                },
+                {
+                    model: Location,
+                    attributes: ['name']
+                }
+            ],
+            raw: true,
+            nest: true
+        });
+        return store;
+    } catch (error) {
+        console.log("Error al obtener stock de tiendas: " + error);
+        return [];
     }
 }

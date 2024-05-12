@@ -3,7 +3,7 @@ import { StockMovements } from "../models/index.js";
 export async function addMovement(stockId, storeId, stateId, user, comment) {
     try {
         let movement = null;
-        console.log(stockId + " " + storeId + " " + stateId);
+
         if (!user && !storeId && !stockId && !stateId) {
             return false;
         }
