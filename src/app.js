@@ -40,7 +40,7 @@ app.set("port", config.port);
 
 //Middleware
 app.use(cors());
-app.use(morgan("dev"));
+//app.use(morgan("dev"));
 app.use(express.json());
 app.use(authMiddleware);
 
