@@ -131,7 +131,7 @@ export const getStoresById = async (req, res) => {
         });
 
         const user = await PermissionStore.findAll({
-            attributes: [],
+            attributes: ['id'],
             where: { store_id: store.id },
             include: [
                 {
@@ -145,7 +145,6 @@ export const getStoresById = async (req, res) => {
 
         const storeWithUsers = { ...store, user };
 
-        //store["user"] = user;
         res.status(200).json(storeWithUsers);
     } catch (error) {
         console.log(error);

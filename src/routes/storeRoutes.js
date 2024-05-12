@@ -9,7 +9,7 @@ router.get("/", getStores);
 router.get('/:id', getStoresById);
 router.post("/responsive", generateResponsive);
 router.post("/permission", addPermissionStore);
-router.post("/permission/:id", removePermission);
+router.delete("/permission/:id", removePermission);
 router.post("/", addStore);
 
 export default router;

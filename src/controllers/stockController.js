@@ -19,20 +19,19 @@ export const addStock = async (req, res) => {
 
 export const getStock = async (req, res) => {
     try {
-        //const stock = await Stock.findAll();
         const stocks = await Stock.findAll({
             include: [
                 {
                     model: Article,
-                    attributes: ['modelname'],
+                    attributes: ['id', 'modelname'],
                     include: [
                         {
                             model: Supplier,
-                            attributes: ['name'], // Incluir solo el nombre del proveedor
+                            attributes: ['id', 'name'], // Incluir solo el nombre del proveedor
                         },
                         {
                             model: Categorie,
-                            attributes: ['name'], // Incluir solo el nombre de la categoría
+                            attributes: ['id', 'name'], // Incluir solo el nombre de la categoría
                         }
                     ]
                 }
@@ -151,6 +150,36 @@ export const getStockByStore = async (req, res) => {
         res.status(200).json(stock);
     } catch (error) {
         console.log("Error al obtener stock de tiendas: " + error);
+        res.status(500).json({ message: "Error interno" });
+    }
+}
+
+export const updateStock = async (req, res) => {
+    const { id } = req.params;
+    const { article, serie, comment } = req.body;
+    try {
+        if (!(id && article && serie)) {
+            return res.status(400).json({ message: "Faltan datos, el articulo y serie son obligatorios" });
+        }
+        await Stock.update({ articleId: article, serie, comment }, { where: { id } });
+        res.status(200).json({ message: "Articulo actualizado correctamente" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error interno" });
+    }
+}
+
+export const deleteStock = async (req, res) => {
+    const { id } = req.params;
+    try {
+        if (!id) {
+            return res.status(400).json({ message: "Faltan datos, el id es obligatorio" });
+        }
+        await Stock.update({ active: false }, { where: { id } });
+        res.status(200).json({ message: "Articulo eliminado correctamente" });
+    } catch (error) {
+        console.log(error);
         res.status(500).json({ message: "Error interno" });
     }
 }
